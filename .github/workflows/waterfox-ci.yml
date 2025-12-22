@@ -1,0 +1,55 @@
+# Build Waterfox and publish release
+name: Waterfox build & release
+on: workflow_dispatch
+env:
+  REPO_DEV: BrowserWorks
+  REPO_NAME: waterfox
+jobs:
+  release-ci:
+    runs-on: ubuntu-24.04
+    outputs:
+      VERSION: ${{ steps.step_getlatest_tag.outputs.VERSION }}
+      ASSET: ${{ steps.step_get_asset.outputs.ASSET }}
+    steps:
+      - name: Checkout local
+        uses: actions/checkout@v4.2.0
+        with:
+          repository: ${{ github.repository }}
+          sparse-checkout: |
+            .github/workflows
+
+      - name: Install build dependencies
+        run: sudo apt-get install git -y -qq
+      - name: Get latest Waterfox release tag
+        id: step_getlatest_tag
+        run: |
+          # get latest release tag from remote
+
+          latest_tag=$(curl -s https://api.github.com/repos/$REPO_DEV/$REPO_NAME/releases/latest |  jq -r '.tag_name')
+
+          echo "INFO: Latest tag = $latest_tag"
+          test ! -z "$latest_tag" && echo "LATEST_TAG=$latest_tag" >> "$GITHUB_ENV" \
+          || echo "ERROR: Latest tag not found" || exit 1
+
+           # use the tag name but remove the 'v' for the asset name to publish
+          tagname=$(echo $latest_tag | sed 's/v//')
+
+          echo "VERSION=$tagname" >> "$GITHUB_OUTPUT"
+      - name: Download tag asset
+        id: step_get_asset
+        run: |
+          curl -L https://github.com/$REPO_DEV/$REPO_NAME/archive/refs/tags/${{ env.LATEST_TAG }}.tar.gz --output waterfox-${{ env.LATEST_TAG }}.tar.gz
+          echo "ASSET=waterfox-${{ env.LATEST_TAG }}.tar.gz" >> "$GITHUB_OUTPUT"
+      - uses: actions/cache/save@v4
+        id: cache
+        with:
+          path: ${{ steps.step_get_asset.outputs.ASSET }}
+          key: ${{ runner.os }}-v${{ steps.step_getlatest_tag.outputs.VERSION }}-${{ hashFiles(steps.step_get_asset.outputs.ASSET) }}
+
+  Fedora:
+    needs: release-ci
+    uses: ./.github/workflows/fedora.yml
+    with:
+      cache-file-path: ${{ needs.release-ci.outputs.ASSET }}
+      version: ${{ needs.release-ci.outputs.VERSION }}
+      containers: "['fedora:42']"

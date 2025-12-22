@@ -1,0 +1,79 @@
+# Fedora 42
+# Build waterfox from release tag and publish .rpm package
+
+on:
+  workflow_call:
+    inputs:
+      cache-file-path:
+        required: true
+        type: string
+      version:
+        required: true
+        type: string
+      containers:
+        required: true
+        type: string
+env:
+  SPEC_FILE: $GITHUB_WORKSPACE/waterfox.spec
+  VENDOR_FILE: $GITHUB_WORKSPACE/vendor.js
+  DESKTOP_FILE: $GITHUB_WORKSPACE/waterfox.desktop
+  DISTR_FILE: $GITHUB_WORKSPACE/distribution.ini
+  RELEASE_TAG: $GITHUB_WORKSPACE/release_tag.txt
+jobs:
+  build:
+    strategy:
+      max-parallel: 2
+      matrix:
+        image: ${{ fromJson(inputs.containers) }}
+    runs-on: ubuntu-24.04
+    container: ${{ matrix.image }}
+    steps:
+      - name: Checkout local
+        uses: actions/checkout@v4.2.0
+        with:
+          repository: ${{ github.repository }}
+      - name: Update tag version inside spec file
+        run: sed -i "s/.*%define release_tag.*/%define release_tag ${{ inputs.version }}/" ${{ env.SPEC_FILE }}
+      - uses: actions/cache/restore@v4
+        id: cache
+        with:
+          key: ${{ runner.os }}-v${{ inputs.version }}-${{ hashFiles(inputs.cache-file-path) }}
+          path: ${{ inputs.cache-file-path }}
+          fail-on-cache-miss: true
+      - name: Install dependencies
+        run: |
+          sudo dnf install -y -q git gcc mold clang-devel rpmdevtools rpmlint fdupes cbindgen diffutils \
+              imake lld mercurial mesa-dri-drivers nasm nodejs rust unzip llvm \
+              llvm-devel yasm zip cargo libdrm-devel libnotify-devel libproxy-devel \
+              python3.11 'pkgconfig(jack)' 'pkgconfig(xt)' 'pkgconfig(gdk-x11-2.0)' \
+              'pkgconfig(glib-2.0)' 'pkgconfig(gobject-2.0)' 'pkgconfig(gtk+-2.0)' \
+              'pkgconfig(gtk+-3.0)' 'pkgconfig(gtk+-unix-print-2.0)' 'pkgconfig(gtk+-unix-print-3.0)' \
+              libcurl-devel 'pkgconfig(libffi)' 'pkgconfig(libpulse)' 'pkgconfig(nspr)' 'pkgconfig(nss)' \
+              alsa-lib-devel 'pkgconfig(gl)'
+      - name: Create rpm tree
+        run: rpmdev-setuptree
+      - name: Move tarball asset to rpm build sources location
+        run: mv ${{ inputs.cache-file-path }} $HOME/rpmbuild/SOURCES/${{ inputs.version }}.tar.gz
+      - name: Move rpm assets to rpmbuild dir
+        run: |
+          mv ${{ env.SPEC_FILE }} $HOME/rpmbuild/SPECS/
+          mv ${{ env.VENDOR_FILE }} $HOME/rpmbuild/SOURCES
+          mv ${{ env.DESKTOP_FILE }} $HOME/rpmbuild/SOURCES
+          mv ${{ env.DISTR_FILE }} $HOME/rpmbuild/SOURCES
+          mv ${{ env.RELEASE_TAG }} $HOME/rpmbuild/SOURCES
+      - name: Build rpm binary package
+        run: |
+          cd $HOME/rpmbuild
+          rpmbuild -bb SPECS/waterfox.spec -v
+          rpm_file=$(find $HOME/rpmbuild/RPMS/x86_64 -name "*.rpm*" ! -name "*src*" ! -name "*debug*")
+          echo "rpm_file = $rpm_file"
+          source /etc/os-release
+          echo "Version ID = $VERSION_ID"
+          mv $rpm_file $HOME/rpmbuild/RPMS/x86_64/waterfox-${{ inputs.version }}.fc$VERSION_ID.x86_64.rpm
+          echo "RPM_ASSET=$HOME/rpmbuild/RPMS/x86_64/waterfox-${{ inputs.version }}.fc$VERSION_ID.x86_64.rpm" >> "$GITHUB_ENV"
+      - name: Release
+        uses: softprops/action-gh-release@v2.0.8
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: ${{ env.RPM_ASSET }}
+# took 83:26.60 to build - mach build

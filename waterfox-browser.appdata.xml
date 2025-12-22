@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+    <id>waterfox</id>
+    <metadata_license>CC-BY-SA-3.0</metadata_license>
+    <project_license>MPL-2.0</project_license>
+    <project_group>Waterfox</project_group>
+    <developer_name>BrowserWorks</developer_name>
+    <name>Waterfox</name>
+    <summary>Customizable privacy-conscious web browser with primary support for webextensions</summary>
+    <description>
+        <p>
+            Waterfox is an open-source, privacy-focused browser based on the popular open source
+            browser with a red panda as a mascot. It is designed to be a drop-in replacement for
+            said browser that offers enhanced privacy features, performance improvements, and
+            customizability while maintaining compatibility with existing extensions. </p>
+
+    </description>
+    <launchable type="desktop-id">waterfox.desktop</launchable>
+    <url type="homepage">https://www.waterfox.net/</url>
+    <url type="bugtracker">https://github.com/WaterfoxCo/Waterfox/issues</url>
+    <provides>
+        <id>waterfox.desktop</id>
+    </provides>
+    <releases>
+        <release version="__VERSION__" date="__DATE__" />
+    </releases>
+</component>
