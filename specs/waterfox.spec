@@ -11,8 +11,6 @@ Summary: A privacy-focused browser built for power users who value customization
 Group: System/GUI/Internet
 License: MPL-2.0
 
-BuildRequires: desktop-file-utils
-
 URL: https://github.com/%{dev}/%{app}
 
 Source0:  https://cdn1.%{app}.net/%{app}/releases/%{version}/Linux_x86_64/%{app}-%{version}.tar.bz2
@@ -44,7 +42,7 @@ for i in 16 32 48 64 128; do
     %{buildroot}%{_datadir}/icons/hicolor/${i}x${i}/apps/%{app}.png
 done
 
-desktop-file-install --dir %{buildroot}%{_datadir}/applications %{SOURCE2}
+%{__install} -Dm 644 %{SOURCE2} %{buildroot}%{_datadir}/applications
 
 %{__install} -Dm 644 %{SOURCE3} %{buildroot}%{appdir}/distribution/distribution.ini
 
