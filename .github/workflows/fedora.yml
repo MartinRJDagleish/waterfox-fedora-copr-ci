@@ -38,7 +38,7 @@ jobs:
       - uses: actions/cache/restore@v4
         id: cache
         with:
-          key: ${{ runner.os }}-v${{ inputs.version }}-${{ hashFiles(inputs.cache-file-path) }}
+          key: ${{ runner.os }}-waterfox-${{ inputs.version }}-${{ hashFiles(inputs.cache-file-path) }}
           path: ${{ inputs.cache-file-path }}
           fail-on-cache-miss: true
       - name: Install dependencies
