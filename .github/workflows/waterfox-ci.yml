@@ -50,6 +50,7 @@ jobs:
           copr_url = ${{ env.COPR_URL }}
           EOF
       - name: Get latest COPR build information
+        continue-on-error: true
         run: |
 
           # check project exists
