@@ -1,2 +1,33 @@
 # waterfox-fedora-copr-ci
-Auto generates build spec for waterfox and auto starts COPR build 
+RPM build spec for packaging the files from https://cdn1.waterfox.net/releases on the Fedora COPR.
+
+Building from src is a resource intensive process, and as a result this package uses the files from https://cdn.waterfox.com/waterfox/releases/
+
+A GitHub actions workflow is scheduled to run daily at 12AM to check the latest version released from https://github.com/BrowserWorks/waterfox
+
+If the latest version does not match the version available from the COPR then a new COPR build is triggered remotely.
+
+The COPR project repository is available from: https://copr.fedorainfracloud.org/coprs/deltacopy/waterfox
+
+## Active releases available
+
+- Fedora 42
+- Fedora 43
+- Fedora rawhide
+
+# Instructions
+
+Enable the COPR repository then install the package.
+
+<pre>
+sudo dnf copr enable deltacopy/waterfox
+sudo dnf in waterfox
+</pre>
+
+<h3> COPR build status </h3> 
+
+[![Copr build status](https://copr.fedorainfracloud.org/coprs/deltacopy/waterfox/package/waterfox/status_image/last_build.png)](https://copr.fedorainfracloud.org/coprs/deltacopy/waterfox/package/waterfox/)
+
+<h3> GitHub action workflow status </h3> 
+
+[![Waterfox Fedora COPR build](https://github.com/DeltaCopy/waterfox-fedora-copr-ci/actions/workflows/waterfox-fedora-copr-ci.yml/badge.svg)](https://github.com/DeltaCopy/waterfox-fedora-copr-ci/blob/main/.github/workflows/waterfox-ci.yml)
