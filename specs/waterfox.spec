@@ -45,7 +45,7 @@ cd %{_sourcedir} && sha256sum -c SHA256SUMS && test $? -ne 0 && echo "sha256sum 
 
 mkdir -p %{buildroot}%{_bindir}
 
-%{__install} -Dm 644 %{SOURCE1} %{buildroot}%{appdir}/browser/defaults/preferences/vendor.js
+%{__install} -Dm 644 %{SOURCE1} %{buildroot}%{appdir}/defaults/pref/vendor.js
 
 for i in 16 32 48 64 128; do
   %{__mkdir_p} %{buildroot}%{_datadir}/icons/hicolor/${i}x${i}/apps
