@@ -14,11 +14,11 @@ License: MPL-2.0
 URL: https://github.com/%{dev}/%{app}
 
 Source0:  https://cdn1.%{app}.net/%{app}/releases/%{version}/Linux_x86_64/%{app}-%{version}.tar.bz2
-Source1: vendor.js
-Source2: %{app}.desktop
-Source3: distribution.ini
-Source4: %{app}-browser.appdata.xml
-Source5: policies.json
+Source1: https://github.com/DeltaCopy/waterfox-fedora-copr-ci/blob/main/vendor.js
+Source2: https://github.com/DeltaCopy/waterfox-fedora-copr-ci/blob/main/%{app}.desktop
+Source3: https://github.com/DeltaCopy/waterfox-fedora-copr-ci/blob/main/distribution.ini
+Source4: https://github.com/DeltaCopy/waterfox-fedora-copr-ci/blob/main/%{app}-browser.appdata.xml
+Source5: https://github.com/DeltaCopy/waterfox-fedora-copr-ci/blob/main/policies.json
 
 ExclusiveArch: x86_64
 
