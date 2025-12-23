@@ -26,7 +26,7 @@ jobs:
           sparse-checkout-cone-mode: false
 
       - name: Install dependencies
-        run: sudo dnf install -y -q copr-cli python3 git gawk
+        run: sudo dnf install -y -q copr-cli python3 git gawk jq
 
       - name: Get latest tag
         run: |
