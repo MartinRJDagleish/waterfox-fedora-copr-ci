@@ -39,7 +39,7 @@ jobs:
       - name: Download tag asset
         id: step_get_asset
         run: |
-          CDN=$(echo $RELEASES_CDN | sed -e 's/${version}/TEST/g' -e 's/-${version}/TEST/g')
+          CDN=$(echo $RELEASES_CDN | sed -e 's/${version}/${{ env.LATEST_TAG }}/g' -e 's/-${version}/${{ env.LATEST_TAG }}/g')
           echo "Release CDN release link = $CDN"
           curl -L $CDN --output waterfox-${{ env.LATEST_TAG }}.tar.bz2
           echo "ASSET=waterfox-${{ env.LATEST_TAG }}.tar.bz" >> "$GITHUB_OUTPUT"
@@ -69,4 +69,3 @@ jobs:
     uses: ./.github/workflows/release.yml
     needs: ["fedora"]
 
-    
