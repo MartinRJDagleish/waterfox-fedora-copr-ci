@@ -17,7 +17,7 @@ URL: https://github.com/%{dev}/%{app}
 Source0: https://cdn1.%{app}.net/%{app}/releases/%{version}/Linux_x86_64/%{app}-%{version}.tar.bz2
 Source1: %{github_rpm_src}/vendor.js
 Source2: %{github_rpm_src}/%{app}.desktop
-Source3: %{github_rpm_src}//distribution.ini
+Source3: %{github_rpm_src}/distribution.ini
 Source4: %{github_rpm_src}/%{app}-browser.appdata.xml
 Source5: %{github_rpm_src}/policies.json
 
