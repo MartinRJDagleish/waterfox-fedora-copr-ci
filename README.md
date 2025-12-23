@@ -30,4 +30,4 @@ sudo dnf in waterfox
 
 <h3> GitHub action workflow status </h3> 
 
-[![Waterfox Fedora COPR build](https://github.com/DeltaCopy/waterfox-fedora-copr-ci/actions/workflows/waterfox-fedora-copr-ci.yml/badge.svg)](https://github.com/DeltaCopy/waterfox-fedora-copr-ci/blob/main/.github/workflows/waterfox-ci.yml)
+[![Waterfox Fedora COPR CI](https://github.com/DeltaCopy/waterfox-fedora-copr-ci/actions/workflows/waterfox-ci.yml/badge.svg)](https://github.com/DeltaCopy/waterfox-fedora-copr-ci/actions/workflows/waterfox-ci.yml)
