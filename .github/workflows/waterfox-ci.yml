@@ -74,11 +74,11 @@ jobs:
                 echo "Skipping COPR build"
             fi
           fi
-      - name: Check if previous step failed
-        if: steps.step_latest_copr_build.outcome == 'failure'
-        run: |
-          echo "Latest COPR build does not exist yet .. starting build"
-          echo "START_BUILD=true" >> "$GITHUB_ENV"
+      # - name: Check if previous step failed
+      #   if: steps.step_latest_copr_build.outcome == 'failure'
+      #   run: |
+      #     echo "Latest COPR build does not exist yet .. starting build"
+      #     echo "START_BUILD=true" >> "$GITHUB_ENV"
       - name: Start COPR build
         if: env.START_BUILD == 'true'
         run: |
