@@ -60,13 +60,7 @@ jobs:
             echo "Latest COPR version = ${LATEST_COPR%-*}"
             echo "Latest Git tag release = ${{ env.LATEST_TAG }}"
 
-            # convert the versions removing the decimal points to ease in comparing them
-
-            copr_version=$(echo "${LATEST_COPR%-*}" | awk -F. '{printf "%03d%03d%03d\n", $1, $2, $3}')
-            git_version=$(echo "${{ env.LATEST_TAG }}" | awk -F. '{printf "%03d%03d%03d\n", $1, $2, $3}')
-
-
-            if [[ $copr_version < $git_version ]] || [[ -z "$LATEST_COPR" ]]; then
+            if [[ $LATEST_COPR < ${{ env.LATEST_TAG }} ]] || [[ -z "$LATEST_COPR" ]]; then
                 echo "START_BUILD=true" >> "$GITHUB_ENV"
                 echo "Starting COPR build"
             else
