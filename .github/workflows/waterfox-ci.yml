@@ -56,11 +56,11 @@ jobs:
           echo "Latest COPR version = ${LATEST_COPR%-*}"
           echo "Latest Git tag release = ${{ env.LATEST_TAG }}"
 
-          if [ -z "$LATEST_COPR" ]; then
+          if [ -z "${LATEST_COPR%-*}" ]; then
             echo "Latest COPR version = ${LATEST_COPR%-*}"
             echo "Latest Git tag release = ${{ env.LATEST_TAG }}"
 
-            if [[ $LATEST_COPR < ${{ env.LATEST_TAG }} ]] || [[ -z "$LATEST_COPR" ]]; then
+            if [[ "$LATEST_COPR" < "${LATEST_COPR%-*}" ]]; then
                 echo "START_BUILD=true" >> "$GITHUB_ENV"
                 echo "Starting COPR build"
             else
