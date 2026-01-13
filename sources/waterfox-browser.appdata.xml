@@ -12,8 +12,8 @@
             Waterfox is an open-source, privacy-focused browser based on the popular open source
             browser with a red panda as a mascot. It is designed to be a drop-in replacement for
             said browser that offers enhanced privacy features, performance improvements, and
-            customizability while maintaining compatibility with existing extensions. </p>
-
+            customizability while maintaining compatibility with existing extensions.
+        </p>
     </description>
     <launchable type="desktop-id">waterfox.desktop</launchable>
     <url type="homepage">https://www.waterfox.net/</url>
